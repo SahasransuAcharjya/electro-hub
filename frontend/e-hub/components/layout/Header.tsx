@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   const router = useRouter();
@@ -35,8 +36,14 @@ export default function Header() {
     <header style={styles.header}>
       <div style={styles.container}>
         <div style={styles.topBar}>
-          <Link href="/" style={styles.logo}>
-            Electro-Hub
+          <Link href="/" style={styles.logoLink}>
+            <Image 
+              src="/images/logo.png" 
+              alt="Electro-Hub" 
+              width={180} 
+              height={60}
+              style={styles.logo}
+            />
           </Link>
 
           <form onSubmit={handleSearch} style={styles.searchForm}>
@@ -99,14 +106,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '32px',
-    padding: '16px 0'
+    padding: '12px 0'
+  },
+  logoLink: {
+    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'center'
   },
   logo: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#000000',
-    textDecoration: 'none',
-    flexShrink: 0
+    objectFit: 'contain' as const,
+    height: 'auto'
   },
   searchForm: {
     flex: 1,

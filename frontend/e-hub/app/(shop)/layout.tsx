@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 export default function ShopLayout({
@@ -12,7 +13,6 @@ export default function ShopLayout({
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -41,8 +41,15 @@ export default function ShopLayout({
       <header style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.topBar}>
-            <Link href="/" style={styles.logo}>
-              Electro-Hub
+            <Link href="/" style={styles.logoLink}>
+              <Image 
+                src="/images/logo.png" 
+                alt="Electro-Hub" 
+                width={180} 
+                height={60}
+                style={styles.logo}
+                priority
+              />
             </Link>
 
             <form onSubmit={handleSearch} style={styles.searchForm}>
@@ -103,7 +110,13 @@ export default function ShopLayout({
         <div style={styles.footerContent}>
           <div style={styles.footerGrid}>
             <div style={styles.footerColumn}>
-              <h3 style={styles.footerTitle}>Electro-Hub</h3>
+              <Image 
+                src="/images/logo.png" 
+                alt="Electro-Hub" 
+                width={160} 
+                height={50}
+                style={styles.footerLogo}
+              />
               <p style={styles.footerText}>
                 Your trusted destination for premium electronics and gadgets.
               </p>
@@ -172,14 +185,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '32px',
-    padding: '16px 0'
+    padding: '12px 0'
+  },
+  logoLink: {
+    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'center'
   },
   logo: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#000000',
-    textDecoration: 'none',
-    flexShrink: 0
+    objectFit: 'contain' as const,
+    height: 'auto'
   },
   searchForm: {
     flex: 1,
@@ -269,11 +284,10 @@ const styles = {
     flexDirection: 'column' as const,
     gap: '12px'
   },
-  footerTitle: {
-    fontSize: '20px',
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: '8px'
+  footerLogo: {
+    objectFit: 'contain' as const,
+    marginBottom: '8px',
+    height: 'auto'
   },
   footerText: {
     fontSize: '14px',

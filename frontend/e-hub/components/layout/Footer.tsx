@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -8,7 +9,13 @@ export default function Footer() {
       <div style={styles.container}>
         <div style={styles.grid}>
           <div style={styles.column}>
-            <h3 style={styles.title}>Electro-Hub</h3>
+            <Image 
+              src="/images/logo.png" 
+              alt="Electro-Hub" 
+              width={160} 
+              height={50}
+              style={styles.logo}
+            />
             <p style={styles.text}>
               Your trusted destination for premium electronics and gadgets.
             </p>
@@ -76,11 +83,10 @@ const styles = {
     flexDirection: 'column' as const,
     gap: '12px'
   },
-  title: {
-    fontSize: '20px',
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: '8px'
+  logo: {
+    objectFit: 'contain' as const,
+    marginBottom: '8px',
+    height: 'auto'
   },
   text: {
     fontSize: '14px',
