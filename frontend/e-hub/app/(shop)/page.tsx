@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { mockProducts, mockCategories } from '@/lib/mockProducts';
 
 interface Product {
   _id: string;
@@ -25,67 +26,12 @@ interface Category {
 
 export default function HomePage() {
   const router = useRouter();
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchFeaturedProducts();
-    fetchCategories();
-  }, []);
-
-  const fetchFeaturedProducts = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?limit=8`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setFeaturedProducts(data.products || []);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setCategories(data.categories?.slice(0, 6) || []);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
+  const [featuredProducts] = useState<Product[]>(mockProducts.filter(p => p.isFeatured));
+  const [categories] = useState<Category[]>(mockCategories);
 
   const handleAddToCart = async (productId: string) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        credentials: 'include',
-        body: JSON.stringify({ productId, quantity: 1 })
-      });
-
-      if (response.ok) {
-        alert('Product added to cart!');
-      }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-    }
+    // Simulate add to cart for mock setup
+    alert('Simulated adding product to cart: ' + productId);
   };
 
   return (
@@ -106,7 +52,6 @@ export default function HomePage() {
         <section style={styles.section}>
           <div style={styles.sectionContent}>
             <h2 style={styles.sectionTitle}>Shop by Category</h2>
-            
             <div style={styles.categoriesGrid}>
               {categories.map((category) => (
                 <Link
@@ -116,8 +61,8 @@ export default function HomePage() {
                 >
                   <div style={styles.categoryImageContainer}>
                     {category.image ? (
-                      <img 
-                        src={category.image} 
+                      <img
+                        src={category.image}
                         alt={category.name}
                         style={styles.categoryImage}
                       />
@@ -144,50 +89,46 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {loading ? (
-            <p style={styles.loadingText}>Loading products...</p>
-          ) : (
-            <div style={styles.productsGrid}>
-              {featuredProducts.map((product) => (
-                <div key={product._id} style={styles.productCard}>
-                  <Link href={`/products/${product._id}`} style={styles.imageLink}>
-                    <div style={styles.imageContainer}>
-                      {product.images && product.images[0] ? (
-                        <img 
-                          src={product.images[0]} 
-                          alt={product.name}
-                          style={styles.productImage}
-                        />
-                      ) : (
-                        <div style={styles.imagePlaceholder}>No Image</div>
-                      )}
-                    </div>
+          <div style={styles.productsGrid}>
+            {featuredProducts.map((product) => (
+              <div key={product._id} style={styles.productCard}>
+                <Link href={`/products/${product._id}`} style={styles.imageLink}>
+                  <div style={styles.imageContainer}>
+                    {product.images && product.images[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        style={styles.productImage}
+                      />
+                    ) : (
+                      <div style={styles.imagePlaceholder}>No Image</div>
+                    )}
+                  </div>
+                </Link>
+
+                <div style={styles.productInfo}>
+                  <p style={styles.category}>{product.category?.name || 'Electronics'}</p>
+
+                  <Link href={`/products/${product._id}`} style={styles.nameLink}>
+                    <h3 style={styles.productName}>{product.name}</h3>
                   </Link>
 
-                  <div style={styles.productInfo}>
-                    <p style={styles.category}>{product.category?.name || 'Electronics'}</p>
-                    
-                    <Link href={`/products/${product._id}`} style={styles.nameLink}>
-                      <h3 style={styles.productName}>{product.name}</h3>
-                    </Link>
-
-                    <div style={styles.ratingRow}>
-                      <span style={styles.rating}>⭐ {product.rating || 0}</span>
-                    </div>
-
-                    <p style={styles.price}>₹{product.price.toLocaleString()}</p>
-
-                    <button
-                      onClick={() => handleAddToCart(product._id)}
-                      style={styles.addButton}
-                    >
-                      Add to Cart
-                    </button>
+                  <div style={styles.ratingRow}>
+                    <span style={styles.rating}>⭐ {product.rating || 0}</span>
                   </div>
+
+                  <p style={styles.price}>₹{product.price.toLocaleString()}</p>
+
+                  <button
+                    onClick={() => handleAddToCart(product._id)}
+                    style={styles.addButton}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -224,6 +165,7 @@ export default function HomePage() {
   );
 }
 
+
 const styles = {
   container: {
     backgroundColor: '#F8F8F8'
@@ -239,66 +181,66 @@ const styles = {
     margin: '0 auto'
   },
   heroTitle: {
-    fontSize: '48px',
+    fontSize: 48,
     fontWeight: 'bold',
-    marginBottom: '16px'
+    marginBottom: 16
   },
   heroSubtitle: {
-    fontSize: '20px',
+    fontSize: 20,
     color: '#F5F5F5',
-    marginBottom: '32px',
-    lineHeight: '1.6'
+    marginBottom: 32,
+    lineHeight: 1.6
   },
   heroButton: {
     display: 'inline-block',
     backgroundColor: '#FFFFFF',
     color: '#000000',
     padding: '16px 40px',
-    fontSize: '16px',
+    fontSize: 16,
     fontWeight: '600',
-    borderRadius: '4px',
+    borderRadius: 4,
     textDecoration: 'none'
   },
   section: {
     padding: '60px 20px'
   },
   sectionContent: {
-    maxWidth: '1400px',
+    maxWidth: 1400,
     margin: '0 auto'
   },
   sectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '32px'
+    marginBottom: 32
   },
   sectionTitle: {
-    fontSize: '32px',
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#1A1A1A'
   },
   viewAllLink: {
-    fontSize: '16px',
+    fontSize: 16,
     color: '#333333',
     textDecoration: 'none',
-    fontWeight: '500'
+    fontWeight: 500
   },
   categoriesGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-    gap: '24px'
+    gap: 24
   },
   categoryCard: {
     backgroundColor: '#FFFFFF',
-    padding: '24px',
-    borderRadius: '8px',
+    padding: 24,
+    borderRadius: 8,
     textAlign: 'center' as const,
     textDecoration: 'none',
     transition: 'transform 0.2s'
   },
   categoryImageContainer: {
-    width: '100px',
-    height: '100px',
+    width: 100,
+    height: 100,
     margin: '0 auto 16px',
     borderRadius: '50%',
     overflow: 'hidden',
@@ -315,29 +257,29 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '36px',
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#333333',
     backgroundColor: '#F5F5F5'
   },
   categoryName: {
-    fontSize: '16px',
+    fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A'
   },
   loadingText: {
-    fontSize: '18px',
+    fontSize: 18,
     color: '#333333',
     textAlign: 'center' as const
   },
   productsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-    gap: '24px'
+    gap: 24
   },
   productCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: '8px',
+    borderRadius: 8,
     overflow: 'hidden'
   },
   imageLink: {
@@ -346,7 +288,7 @@ const styles = {
   },
   imageContainer: {
     width: '100%',
-    height: '220px',
+    height: 220,
     backgroundColor: '#F8F8F8'
   },
   productImage: {
@@ -360,50 +302,50 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '14px',
+    fontSize: 14,
     color: '#9E9E9E',
     backgroundColor: '#F5F5F5'
   },
   productInfo: {
-    padding: '16px'
+    padding: 16
   },
   category: {
-    fontSize: '12px',
+    fontSize: 12,
     color: '#9E9E9E',
-    marginBottom: '8px',
+    marginBottom: 8,
     textTransform: 'uppercase' as const
   },
   nameLink: {
     textDecoration: 'none'
   },
   productName: {
-    fontSize: '16px',
+    fontSize: 16,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: '8px'
+    marginBottom: 8
   },
   ratingRow: {
-    marginBottom: '12px'
+    marginBottom: 12
   },
   rating: {
-    fontSize: '14px',
+    fontSize: 14,
     color: '#333333'
   },
   price: {
-    fontSize: '20px',
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#1A1A1A',
-    marginBottom: '12px'
+    marginBottom: 12
   },
   addButton: {
     width: '100%',
     backgroundColor: '#000000',
     color: '#FFFFFF',
-    padding: '12px',
-    fontSize: '14px',
+    padding: 12,
+    fontSize: 14,
     fontWeight: '600',
     border: 'none',
-    borderRadius: '4px',
+    borderRadius: 4,
     cursor: 'pointer'
   },
   featuresSection: {
@@ -413,23 +355,23 @@ const styles = {
   featuresGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '32px'
+    gap: 32
   },
   featureCard: {
     textAlign: 'center' as const
   },
   featureIcon: {
-    fontSize: '48px',
-    marginBottom: '16px'
+    fontSize: 48,
+    marginBottom: 16
   },
   featureTitle: {
-    fontSize: '18px',
+    fontSize: 18,
     fontWeight: '600',
     color: '#1A1A1A',
-    marginBottom: '8px'
+    marginBottom: 8
   },
   featureText: {
-    fontSize: '14px',
+    fontSize: 14,
     color: '#9E9E9E'
   }
 };
