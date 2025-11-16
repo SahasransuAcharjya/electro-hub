@@ -45,8 +45,8 @@ export default function ShopLayout({
               <Image 
                 src="/images/logo.png" 
                 alt="Electro-Hub" 
-                width={180} 
-                height={60}
+                width={120} 
+                height={40}
                 style={styles.logo}
                 priority
               />
@@ -113,8 +113,8 @@ export default function ShopLayout({
               <Image 
                 src="/images/logo.png" 
                 alt="Electro-Hub" 
-                width={160} 
-                height={50}
+                width={140} 
+                height={45}
                 style={styles.footerLogo}
               />
               <p style={styles.footerText}>
@@ -184,8 +184,9 @@ const styles = {
   topBar: {
     display: 'flex',
     alignItems: 'center',
-    gap: '32px',
-    padding: '12px 0'
+    gap: '24px',
+    padding: '10px 0',
+    minHeight: '60px'
   },
   logoLink: {
     flexShrink: 0,
@@ -204,7 +205,7 @@ const styles = {
   },
   searchInput: {
     flex: 1,
-    padding: '10px 16px',
+    padding: '8px 12px',
     fontSize: '14px',
     border: '1px solid #F5F5F5',
     borderRadius: '4px',
@@ -213,7 +214,7 @@ const styles = {
     outline: 'none'
   },
   searchButton: {
-    padding: '10px 16px',
+    padding: '8px 16px',
     backgroundColor: '#000000',
     color: '#FFFFFF',
     border: 'none',
@@ -250,7 +251,7 @@ const styles = {
   nav: {
     display: 'flex',
     gap: '32px',
-    padding: '16px 0',
+    padding: '12px 0',
     borderTop: '1px solid #F5F5F5'
   },
   navLink: {
