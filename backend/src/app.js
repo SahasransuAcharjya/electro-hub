@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const corsMiddleware = require('./middleware/cors');
 const routes = require('./routes');
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middleware/errorhandler'); //
 const logger = require('./utils/logger');
 
 const app = express();
