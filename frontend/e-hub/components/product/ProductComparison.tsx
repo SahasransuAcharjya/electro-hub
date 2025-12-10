@@ -49,27 +49,7 @@ export default function ProductComparison({ products, onRemove }: ProductCompari
         </thead>
 
         <tbody>
-          <tr style={styles.row}>
-            <td style={styles.labelCell}>Product</td>
-            {products.map((product) => (
-              <td key={product._id} style={styles.dataCell}>
-                <div style={styles.productInfo}>
-                  {product.images && product.images[0] ? (
-                    <img 
-                      src={product.images[0]} 
-                      alt={product.name}
-                      style={styles.productImage}
-                    />
-                  ) : (
-                    <div style={styles.imagePlaceholder}>No Image</div>
-                  )}
-                  <h3 style={styles.productName}>{product.name}</h3>
-                </div>
-              </td>
-            ))}
-          </tr>
-
-          <tr style={styles.row}>
+        <tr style={styles.row}>
             <td style={styles.labelCell}>Price</td>
             {products.map((product) => (
               <td key={product._id} style={styles.dataCell}>
@@ -78,7 +58,8 @@ export default function ProductComparison({ products, onRemove }: ProductCompari
             ))}
           </tr>
 
-          {product.brand && (
+          {/* CHANGE THIS LINE: Use products.some() to check if any product has a brand */}
+          {products.some(p => p.brand) && (
             <tr style={styles.row}>
               <td style={styles.labelCell}>Brand</td>
               {products.map((product) => (
@@ -91,10 +72,6 @@ export default function ProductComparison({ products, onRemove }: ProductCompari
 
           <tr style={styles.row}>
             <td style={styles.labelCell}>Rating</td>
-            {products.map((product) => (
-              <td key={product._id} style={styles.dataCell}>
-                ⭐ {product.rating || 0}/5
-              </td>
             ))}
           </tr>
 
